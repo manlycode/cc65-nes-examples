@@ -1,7 +1,8 @@
 TEMPDIR := $(shell mktemp -d)
 TOOLSDIR := /usr/local/bin
+EXECUTABLE := example4.nes
 
-.PHONY: clean all
+.PHONY: clean all run
 
 .PRECIOUS: *.o
 
@@ -24,6 +25,8 @@ crt0.o: crt0.s
 %.nes: %.o crt0.o
 	ld65 -C nes.cfg -o $@ crt0.o $< nes.lib
 
+run:
+	java -jar tools/nintaco/Nintaco.jar $(EXECUTABLE)
 
 tools:
 	mkdir tools
