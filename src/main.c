@@ -3,7 +3,6 @@
 
 #include "neslib.h"
 
-
 //variables
 
 static unsigned char i;

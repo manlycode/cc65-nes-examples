@@ -1,6 +1,6 @@
 TEMPDIR := $(shell mktemp -d)
 TOOLSDIR := /usr/local/bin
-EXECUTABLE := example4.nes
+EXECUTABLE := main.nes
 BUILD_DIR := build
 LIB_DIR := lib
 
@@ -11,8 +11,8 @@ LIB_DIR := lib
 all: main.nes
 
 clean:
-	@rm -fv main.s
-	@rm -fv main.o
+	@rm -fv build/main.s
+	@rm -fv build/main.o
 	@rm -fv main.nes
 	@rm -fv crt0.o
 
@@ -21,10 +21,10 @@ crt0.o: crt0.s
 
 $(BUILD_DIR)/%.o: src/%.c
 	cc65 -I $(LIB_DIR) -Oi $< -o $(BUILD_DIR)/$*.s --add-source
-	ca65 $(BUILD_DIR)/$*.s
+	ca65 $(BUILD_DIR)/$*.s -o $(BUILD_DIR)/$*.o
 	rm $(BUILD_DIR)/$*.s
 
-%.nes: %.o crt0.o
+%.nes: $(BUILD_DIR)/%.o crt0.o
 	ld65 -C nes.cfg -o $@ crt0.o $< nes.lib
 
 run:
