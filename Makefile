@@ -1,26 +1,28 @@
 TEMPDIR := $(shell mktemp -d)
 TOOLSDIR := /usr/local/bin
 EXECUTABLE := example4.nes
+BUILD_DIR := build
+LIB_DIR := lib
 
 .PHONY: clean all run
 
 .PRECIOUS: *.o
 
-all: example1.nes example2.nes example3.nes example4.nes example5.nes
+all: main.nes
 
 clean:
-	@rm -fv example1.s example2.s example3.s example4.s example5.s
-	@rm -fv example1.o example2.o example3.o example4.o example5.o
-	@rm -fv example1.nes example2.nes example3.nes example4.nes example5.nes
+	@rm -fv main.s
+	@rm -fv main.o
+	@rm -fv main.nes
 	@rm -fv crt0.o
 
 crt0.o: crt0.s
 	ca65 crt0.s
 
-%.o: %.c
-	cc65 -Oi $< --add-source
-	ca65 $*.s
-	rm $*.s
+$(BUILD_DIR)/%.o: src/%.c
+	cc65 -I $(LIB_DIR) -Oi $< -o $(BUILD_DIR)/$*.s --add-source
+	ca65 $(BUILD_DIR)/$*.s
+	rm $(BUILD_DIR)/$*.s
 
 %.nes: %.o crt0.o
 	ld65 -C nes.cfg -o $@ crt0.o $< nes.lib

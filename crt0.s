@@ -234,15 +234,15 @@ detectNTSC:
 
 	jmp _main			;no parameters
 
-	.include "neslib.s"
+	.include "lib/neslib.s"
 
 .segment "RODATA"
 
-	.include "music.s"
+	.include "lib/music.s"
 
 	.if(FT_SFX_ENABLE)
 sounds_data:
-	.include "sounds.s"
+	.include "lib/sounds.s"
 	.endif
 
 .segment "SAMPLES"
@@ -258,4 +258,4 @@ sounds_data:
 
 .segment "CHARS"
 
-	.incbin "tileset.chr"
+	.incbin "res/tileset.chr"
